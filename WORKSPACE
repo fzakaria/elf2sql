@@ -26,6 +26,38 @@ http_archive(
 )
 
 http_archive(
+    name = "com_google_absl",
+    urls = ["https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.3.zip"],
+    strip_prefix = "abseil-cpp-20230125.3",
+    sha256 = "51d676b6846440210da48899e4df618a357e6e44ecde7106f1e44ea16ae8adc7",
+)
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.1/bazel-skylib-1.4.1.tar.gz",
+    ],
+)
+
+# GoogleTest/GoogleMock framework. Used by most unit-tests.
+http_archive(
+    name = "com_google_googletest",
+    sha256 = "ffa17fbc5953900994e2deec164bb8949879ea09b411e07f215bfbb1f87f4632",
+    strip_prefix = "googletest-1.13.0",
+    urls = ["https://github.com/google/googletest/archive/refs/tags/v1.13.0.zip"],
+)
+
+# Google benchmark.
+http_archive(
+    name = "com_github_google_benchmark",  # 2023-01-10T16:48:17Z
+    sha256 = "ede6830512f21490eeea1f238f083702eb178890820c14451c1c3d69fd375b19",
+    strip_prefix = "benchmark-a3235d7b69c84e8c9ff8722a22b8ac5e1bc716a6",
+    urls = ["https://github.com/google/benchmark/archive/a3235d7b69c84e8c9ff8722a22b8ac5e1bc716a6.zip"],
+)
+
+http_archive(
     name = "io_buildbuddy_buildbuddy_toolchain",
     sha256 = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd",
     strip_prefix = "buildbuddy-toolchain-fd351ca8f152d66fc97f9d98009e0ae000854e8f",
@@ -38,4 +70,4 @@ buildbuddy_deps()
 
 load("@io_buildbuddy_buildbuddy_toolchain//:rules.bzl", "buildbuddy", "UBUNTU20_04_IMAGE")
 
-buildbuddy(name = "buildbuddy_toolchain", container_image = UBUNTU20_04_IMAGE)
+buildbuddy(name = "buildbuddy_toolchain", container_image = UBUNTU20_04_IMAGE, llvm = True)

@@ -1,3 +1,6 @@
+# Abseil needs at least C++14
+build --cxxopt='-std=c++14'
+
 build --bes_results_url=https://app.buildbuddy.io/invocation/
 build --bes_backend=grpcs://remote.buildbuddy.io
 build --remote_cache=grpcs://remote.buildbuddy.io
