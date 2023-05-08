@@ -37,6 +37,21 @@ build:remote --remote_timeout=3600
 # for a remote machine to execute them.
 build:remote --jobs=50
 
+# Add a bunch of useful status commands for BuildBuddy
+build:remote --workspace_status_command=$(pwd)/workspace_status.sh
+
+# Improve remote cache throughput.
+build:remote --experimental_remote_cache_compression
+
+# Reduce the number of unnecessary cache uploads that Bazel might perform during a build.
+build:remote --experimental_remote_build_event_upload=minimal
+
+# More detailed timing information
+build:remote --noslim_profile --experimental_profile_include_target_label --experimental_profile_include_primary_output 
+
+# Reduce the payload size of the uploaded build event stream by eliminating duplicate file references.
+build:remote --nolegacy_important_outputs
+
 # Try to import per user bazelrc
 # This should have API key for BuildBuddy
 try-import %workspace%/user.bazelrc
