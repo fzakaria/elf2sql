@@ -1,0 +1,17 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+cmake(
+    name = "lief",
+    cache_entries = {
+        "CMAKE_C_FLAGS": "-fPIC",
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "LIEF_PYTHON_API" : "off",
+        "LIEF_EXAMPLES" : "off",
+        "LIEF_PE" : "off",
+        "LIEF_MACHO": "off",
+        "LIEF_DEX" : "off"
+    },
+    lib_source = "@lief//:all",
+    targets = [ "LIB_LIEF" ],
+    out_static_libs = ["libLIEF.a"],
+)
