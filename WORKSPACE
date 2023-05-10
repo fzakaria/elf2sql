@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 http_archive(
     name = "rules_foreign_cc",
@@ -19,17 +20,17 @@ BUILD_ALL_CONTENT = """filegroup(name = "all", srcs = glob(["**"]), visibility =
 
 http_archive(
     name = "lief",
+    build_file_content = BUILD_ALL_CONTENT,
     sha256 = "8834e2ccfeefd1003527887357950173fe55e9a712004aa638af67378e28ef55",
     strip_prefix = "LIEF-0.13.0",
     url = "https://github.com/lief-project/LIEF/archive/refs/tags/0.13.0.tar.gz",
-    build_file_content = BUILD_ALL_CONTENT,
 )
 
 http_archive(
     name = "com_google_absl",
-    urls = ["https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.3.zip"],
-    strip_prefix = "abseil-cpp-20230125.3",
     sha256 = "51d676b6846440210da48899e4df618a357e6e44ecde7106f1e44ea16ae8adc7",
+    strip_prefix = "abseil-cpp-20230125.3",
+    urls = ["https://github.com/abseil/abseil-cpp/archive/refs/tags/20230125.3.zip"],
 )
 
 http_archive(
@@ -57,6 +58,13 @@ http_archive(
     urls = ["https://github.com/google/benchmark/archive/a3235d7b69c84e8c9ff8722a22b8ac5e1bc716a6.zip"],
 )
 
+# Google glfags
+git_repository(
+    name = "com_github_gflags_gflags",
+    remote = "https://github.com/gflags/gflags.git",
+    tag = "v2.2.2",
+)
+
 http_archive(
     name = "io_buildbuddy_buildbuddy_toolchain",
     sha256 = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd",
@@ -68,6 +76,10 @@ load("@io_buildbuddy_buildbuddy_toolchain//:deps.bzl", "buildbuddy_deps")
 
 buildbuddy_deps()
 
-load("@io_buildbuddy_buildbuddy_toolchain//:rules.bzl", "buildbuddy", "UBUNTU20_04_IMAGE")
+load("@io_buildbuddy_buildbuddy_toolchain//:rules.bzl", "UBUNTU20_04_IMAGE", "buildbuddy")
 
-buildbuddy(name = "buildbuddy_toolchain", container_image = UBUNTU20_04_IMAGE, llvm = True)
+buildbuddy(
+    name = "buildbuddy_toolchain",
+    container_image = UBUNTU20_04_IMAGE,
+    llvm = True,
+)

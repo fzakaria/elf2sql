@@ -1,0 +1,8 @@
+cc_binary(
+    name = "cli",
+    srcs = ["main.cc"],
+    deps = [
+        "//third_party:lief",
+        "@com_github_gflags_gflags//:gflags",
+    ],
+)

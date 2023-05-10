@@ -47,7 +47,7 @@ build:remote --workspace_status_command=$(pwd)/workspace_status.sh
 build:remote --experimental_remote_cache_compression
 
 # Reduce the number of unnecessary cache uploads that Bazel might perform during a build.
-build:remote --experimental_remote_build_event_upload=minimal
+# build:remote --remote_build_event_upload=minimal
 
 # More detailed timing information
 build:remote --noslim_profile --experimental_profile_include_target_label --experimental_profile_include_primary_output 
