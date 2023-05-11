@@ -65,6 +65,15 @@ git_repository(
     tag = "v2.2.2",
 )
 
+# SQLite
+http_archive(
+    name = "sqlite3",
+    build_file = "//third_party:sqlite.BUILD",
+    sha256 = "01df06a84803c1ab4d62c64e995b151b2dbcf5dbc93bbc5eee213cb18225d987",
+    strip_prefix = "sqlite-amalgamation-3410200",
+    url = "https://www.sqlite.org/2023/sqlite-amalgamation-3410200.zip",
+)
+
 http_archive(
     name = "io_buildbuddy_buildbuddy_toolchain",
     sha256 = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd",
