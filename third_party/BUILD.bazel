@@ -1,4 +1,5 @@
 load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
 
 package(
     default_visibility = [
@@ -20,4 +21,12 @@ cmake(
     lib_source = "@lief//:all",
     out_static_libs = ["libLIEF.a"],
     targets = ["LIB_LIEF"],
+)
+
+# Add a few tests for third_party software here
+build_test(
+    name = "third_party_tests",
+    targets = [
+        "@sqlite3//:shell",
+    ],
 )

@@ -18,5 +18,6 @@ cc_binary(
   srcs = [ "shell.c" ],
   deps = [
     ":sqlite3"
-  ]
+  ],
+  visibility = ["//visibility:public"],
  )
