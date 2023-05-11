@@ -55,6 +55,16 @@ build:remote --noslim_profile --experimental_profile_include_target_label --expe
 # Reduce the payload size of the uploaded build event stream by eliminating duplicate file references.
 build:remote --nolegacy_important_outputs
 
+# Allow our build results to be visible publicly
+build:remote --build_metadata=VISIBILITY=PUBLIC
+
+# Support GitHub actions
+# https://www.buildbuddy.io/docs/rbe-github-actions
+build:ci --build_metadata=ROLE=CI
+build:ci --bes_results_url=https://app.buildbuddy.io/invocation/
+build:ci --bes_backend=grpcs://remote.buildbuddy.io
+build:ci --config=remote
+
 # Try to import per user bazelrc
 # This should have API key for BuildBuddy
 try-import %workspace%/user.bazelrc
