@@ -58,13 +58,6 @@ http_archive(
     urls = ["https://github.com/google/benchmark/archive/a3235d7b69c84e8c9ff8722a22b8ac5e1bc716a6.zip"],
 )
 
-# Google glfags
-git_repository(
-    name = "com_github_gflags_gflags",
-    remote = "https://github.com/gflags/gflags.git",
-    tag = "v2.2.2",
-)
-
 # SQLite
 http_archive(
     name = "sqlite3",
@@ -72,14 +65,6 @@ http_archive(
     sha256 = "01df06a84803c1ab4d62c64e995b151b2dbcf5dbc93bbc5eee213cb18225d987",
     strip_prefix = "sqlite-amalgamation-3410200",
     url = "https://www.sqlite.org/2023/sqlite-amalgamation-3410200.zip",
-)
-
-# Google Logging Library
-http_archive(
-    name = "com_github_google_glog",
-    sha256 = "122fb6b712808ef43fbf80f75c52a21c9760683dae470154f02bddfc61135022",
-    strip_prefix = "glog-0.6.0",
-    urls = ["https://github.com/google/glog/archive/v0.6.0.zip"],
 )
 
 # Hedron's Compile Commands Extractor for Bazel

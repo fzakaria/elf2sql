@@ -1,22 +1,28 @@
-#include "gflags/gflags.h"
-#include "glog/logging.h"
+#include "absl/flags/flag.h"
+#include "absl/flags/parse.h"
+#include "absl/flags/usage.h"
+#include "absl/log/initialize.h"
+#include "absl/debugging/failure_signal_handler.h"
+#include "absl/debugging/symbolize.h"
+#include "absl/log/log.h"
 
-DEFINE_bool(verbose, false, "Display program name before message");
+void InitGoogle(int* argc, char*** argv) {
+  absl::InitializeLog();
+  absl::SetProgramUsageMessage("Convert ELF to SQLite databases");
+  // Initialize the symbolizer to get a human-readable stack trace
+  absl::InitializeSymbolizer(*argv[0]);
+  absl::ParseCommandLine(*argc, *argv);
+  absl::InstallFailureSignalHandler(absl::FailureSignalHandlerOptions {});
+}
+
 
 int main(int argc, char** argv) {
-  gflags::SetUsageMessage("Convert ELF to SQLite databases");
-  gflags::SetVersionString("1.0.0");
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  InitGoogle(&argc, &argv);
 
-  // to simplify our application lets log to STDERR rather than log files
-  // as this is a CLI application
-  FLAGS_logtostderr = true;
+  if (argc <= 1) {
+    LOG(ERROR) << "You must include at least one filename.";
+    return EXIT_FAILURE;
+  }
 
-  // Initialize Google’s logging library.
-  google::InitGoogleLogging(argv[0]);
-  google::InstallFailureSignalHandler();
-  if (argc < 1) {}
-
-  gflags::ShutDownCommandLineFlags();
   return 0;
 }
