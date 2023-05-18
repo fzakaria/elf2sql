@@ -74,6 +74,14 @@ http_archive(
     url = "https://www.sqlite.org/2023/sqlite-amalgamation-3410200.zip",
 )
 
+# Google Logging Library
+http_archive(
+    name = "com_github_google_glog",
+    sha256 = "122fb6b712808ef43fbf80f75c52a21c9760683dae470154f02bddfc61135022",
+    strip_prefix = "glog-0.6.0",
+    urls = ["https://github.com/google/glog/archive/v0.6.0.zip"],
+)
+
 http_archive(
     name = "io_buildbuddy_buildbuddy_toolchain",
     sha256 = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd",
