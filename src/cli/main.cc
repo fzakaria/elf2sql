@@ -83,8 +83,8 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  //TODO(fzakaria): figure out a better way for this
-  // this allows bazel run to create files where you invoke it.
+  // TODO(fzakaria): figure out a better way for this
+  //  this allows bazel run to create files where you invoke it.
   const char* bazelWorkingDirectory = std::getenv("BUILD_WORKING_DIRECTORY");
   std::string database = absl::StrFormat("%s/test.db", bazelWorkingDirectory);
 
