@@ -1,6 +1,22 @@
 cc_binary(
-    name = "cli",
-    srcs = ["main.cc"],
+    name = "elf2sql",
+    srcs = ["elf2sql.cc"],
+    deps = [
+        "//third_party:lief",
+        "@com_google_absl//absl/debugging:failure_signal_handler",
+        "@com_google_absl//absl/debugging:symbolize",
+        "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/flags:parse",
+        "@com_google_absl//absl/log",
+        "@com_google_absl//absl/log:initialize",
+        "@com_google_absl//absl/strings:str_format",
+        "@sqlite3",
+    ],
+)
+
+cc_binary(
+    name = "sql2elf",
+    srcs = ["sql2elf.cc"],
     deps = [
         "//third_party:lief",
         "@com_google_absl//absl/debugging:failure_signal_handler",
