@@ -6,18 +6,18 @@ cc_library(
         "sqlite3ext.h",
     ],
     defines = ["SQLITE_OMIT_DEPRECATED"],
-    visibility = ["//visibility:public"],
     local_defines = [
-      "SQLITE_DQS=0",
-      "SQLITE_OMIT_DEPRECATED"
-    ]
+        "SQLITE_DQS=0",
+        "SQLITE_OMIT_DEPRECATED",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 cc_binary(
-  name = "shell",
-  srcs = [ "shell.c" ],
-  deps = [
-    ":sqlite3"
-  ],
-  visibility = ["//visibility:public"],
- )
+    name = "shell",
+    srcs = ["shell.c"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":sqlite3",
+    ],
+)
