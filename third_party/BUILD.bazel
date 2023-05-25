@@ -1,4 +1,4 @@
-load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake", "configure_make")
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 
 package(
@@ -29,4 +29,41 @@ build_test(
     targets = [
         "@sqlite3//:shell",
     ],
+)
+
+configure_make(
+    name = "nasm-build",
+    configure_in_place = True,
+    configure_options = [
+        ## ver.c depends on __DATE__, which makes the
+        ## build non-hermetic. Bazel corrects this(?) by setting both to
+        ## 'redacted', which is broken because it is not quoted.
+        ## This fixes that.
+        "CFLAGS='-Dredacted=\"redacted\"'",
+    ],
+    install_prefix = "bin",
+    lib_source = "@nasm//:all",
+    linkopts = [
+        "-v",
+    ],
+    out_binaries = [
+        "nasm",
+    ],
+)
+
+filegroup(
+    name = "nasm-bin",
+    srcs = [":nasm-build"],
+    output_group = "nasm",
+)
+
+# Wow is this really needed so I can create an executable rule from
+# the foreign_rules for configure_make
+# bazel run //third_party:nasm -- -help
+genrule(
+    name = "nasm-binary",
+    srcs = [":nasm-bin"],
+    outs = ["nasm"],
+    cmd = "cp $< $@",
+    executable = True,
 )

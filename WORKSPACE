@@ -96,6 +96,14 @@ http_archive(
     ],
 )
 
+http_archive(
+    name = "nasm",
+    build_file_content = BUILD_ALL_CONTENT,
+    sha256 = "d833bf0f5716e89dbcd345b7f545f25fe348c6e2ef16dbc293e1027bcd22d881",
+    strip_prefix = "nasm-2.16.01",
+    url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.gz",
+)
+
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
