@@ -23,19 +23,18 @@ void InitGoogle(const int* argc, char*** argv) {
 }
 
 void convertSQLiteToElf(const std::string& elfFile,
-                        const std::string& sqliteFile) {
-
-}
+                        const std::string& sqliteFile) {}
 
 bool isSQLiteDatabase(const std::string& filename) {
-    sqlite3* db;
-    int rc = sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READONLY, nullptr);
-    if (rc == SQLITE_OK) {
-        sqlite3_close(db);
-        return true;
-    } else {
-        return false;
-    }
+  sqlite3* db;
+  int rc =
+      sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READONLY, nullptr);
+  if (rc == SQLITE_OK) {
+    sqlite3_close(db);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 int main(int argc, char** argv) {
