@@ -1,4 +1,4 @@
-load("//tools:nasm.bzl", "nasm_binary", "nasm_object")
+load("//tools:nasm.bzl", "nasm_binary")
 
 nasm_binary(
     name = "tiny",
