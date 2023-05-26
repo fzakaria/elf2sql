@@ -44,7 +44,7 @@ def nasm_binary(name, src):
         name = name,
         outs = [out],
         srcs = [":%s-object" % name],
-        cmd = "ld -s $< -o $@",
+        cmd = "ld -z noseparate-code -s $< -o $@",
         executable = True,
         message = "Creating the binary %s" % out,
     )
