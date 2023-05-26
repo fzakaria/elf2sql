@@ -1,7 +1,8 @@
-.code32
-.globl _start
-.section .text
+; tiny.asm
+BITS 32
+GLOBAL _start
+SECTION .text
 _start:
-                movl    $1, %eax
-                movl    $42, %ebx
-                int     $0x80
+              mov     eax, 1
+              mov     ebx, 42
+              int     0x80

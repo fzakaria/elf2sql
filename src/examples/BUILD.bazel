@@ -1,24 +1,6 @@
-cc_binary(
+load("//tools:nasm.bzl", "nasm_binary", "nasm_object")
+
+nasm_binary(
     name = "tiny",
-    srcs = ["tiny.asm"],
-    copts = [
-        "-v",
-    ],
-    linkopts = [
-        "-v",
-        # make sure there is no stdlib linked
-        "-nostdlib",
-        "-nodefaultlibs",
-        "-nolibc",
-        # strip the binary
-        "-s",
-        # generate a fully static file
-        "-static",
-        # exclude the default main setup file stuff
-        "-nostartfiles",
-        # remove the build-id section
-        # TODO(fzakaria): does not get set with buildbuddy toolchain
-        # which sets it to md5 always.
-        "-Wl,--build-id=none",
-    ],
+    src = "tiny.asm",
 )
