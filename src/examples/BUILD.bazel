@@ -4,3 +4,15 @@ nasm_binary(
     name = "tiny",
     src = "tiny.asm",
 )
+
+cc_binary(
+    name = "teensy-creator",
+    srcs = ["teensy.cc"],
+)
+
+genrule(
+    name = "teensy-bin",
+    srcs = ["teensy-creator"],
+    outs = ["teensy"],
+    cmd = "$(location :teensy-creator) $@",
+)
