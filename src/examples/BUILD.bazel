@@ -1,9 +1,12 @@
 load("//tools:nasm.bzl", "nasm_binary")
+load("//tools:test_helpers.bzl", "test_return_code")
 
 nasm_binary(
     name = "tiny",
     src = "tiny.asm",
 )
+
+test_return_code("tiny-test", 42, "tiny")
 
 cc_binary(
     name = "teensy-creator",
@@ -16,3 +19,5 @@ genrule(
     outs = ["teensy"],
     cmd = "$(location :teensy-creator) $@",
 )
+
+test_return_code("teensy-test", 42, "teensy-bin")
