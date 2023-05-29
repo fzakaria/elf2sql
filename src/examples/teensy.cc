@@ -2,16 +2,20 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <array>
 #include <cstdio>
 
 /**
  * This is the program code that will be written to the ELF file.
  * All it does is call the exit system call with the value 42.
  */
-const uint8_t programCode[] = {
+const std::array<uint8_t, 12> programCode = {
     0xb8, 0x01, 0x00, 0x00, 0x00,  // mov    eax, 0x1
     0xbb, 0x2a, 0x00, 0x00, 0x00,  // mov    ebx, 0x2a
     0xcd, 0x80};                   // int    0x80
+
+const uint VIRTUAL_ADDRESS_START = 0x400000;
+
 /**
  * This function creates the smallest possible ELF executable file for Linux.
  * It is based on the excellent blog post
@@ -44,7 +48,8 @@ int main(int argc, char *argv[]) {
       // by ld. Let's use the same value here just to mimic it.
       // We also offset the ELF header and program header table as the machine
       // code will be written to the file after them.
-      .e_entry = 0x400000 + sizeof(Elf64_Ehdr) + sizeof(Elf64_Phdr),
+      .e_entry =
+          VIRTUAL_ADDRESS_START + sizeof(Elf64_Ehdr) + sizeof(Elf64_Phdr),
       .e_phoff = sizeof(Elf64_Ehdr),  // Offset of the program header table
       .e_shoff = 0,  // Offset of the section header table (none in this case)
       .e_flags = 0,  // Processor-specific flags
@@ -64,7 +69,7 @@ int main(int argc, char *argv[]) {
       .p_offset = 0,           // Offset of the segment in the file
       // Virtual address at which the segment should be loaded in memory
       // We set it to 0x400000 to mimic ld.
-      .p_vaddr = 0x400000,
+      .p_vaddr = VIRTUAL_ADDRESS_START,
       // Physical address at which the segment should be loaded. We don't
       // care about physical addresses so we set it to 0.
       .p_paddr = 0,
@@ -93,7 +98,7 @@ int main(int argc, char *argv[]) {
       .p_align = 1};
 
   // Create and write the ELF file
-  int fd =
+  const int fd =
       open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IXUSR);
   if (fd == -1) {
     perror("open");
@@ -115,7 +120,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   // Write program code to the file
-  written = write(fd, programCode, sizeof(programCode));
+  written = write(fd, programCode.data(), programCode.size());
   if (written == -1) {
     perror("write");
     close(fd);

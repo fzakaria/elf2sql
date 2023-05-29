@@ -6,7 +6,11 @@ nasm_binary(
     src = "tiny.asm",
 )
 
-test_return_code("tiny-test", 42, "tiny")
+test_return_code(
+    name = "tiny-test",
+    binary = "tiny",
+    ret_code = 42,
+)
 
 cc_binary(
     name = "teensy-creator",
@@ -20,4 +24,8 @@ genrule(
     cmd = "$(location :teensy-creator) $@",
 )
 
-test_return_code("teensy-test", 42, "teensy-bin")
+test_return_code(
+    name = "teensy-test",
+    binary = "teensy-bin",
+    ret_code = 42,
+)

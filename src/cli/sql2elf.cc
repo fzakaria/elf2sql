@@ -32,9 +32,8 @@ bool isSQLiteDatabase(const std::string& filename) {
   if (rc == SQLITE_OK) {
     sqlite3_close(db);
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 int main(int argc, char** argv) {
