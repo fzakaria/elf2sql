@@ -1,0 +1,17 @@
+---
+# Configure clang-tidy for this project.
+# See https://clang.llvm.org/extra/clang-tidy/ for documentation.
+Checks: >
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  bugprone-*,
+  google-*,
+  abseil-*,
+  misc-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  performance-*,
+  portability-*,
+  readability-*,
+
+FormatStyle: file # Use the style from .clang-format.

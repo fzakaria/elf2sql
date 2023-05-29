@@ -1,8 +1,11 @@
 # Format c++ files
 fmt:
-    clang-format -i $(fd . src/ --extension cc --extension h)
     buildifier -r .
     buildifier --lint=fix -r .
+    run-clang-tidy $(pwd)/src -fix -quiet
+    clang-format -i $(fd . src/ --extension cc --extension h)
 
 lint:
-    buildifier -r . --lint=warn
+    clang-format --dry-run --Werror $(fd . src/ --extension cc --extension h)
+    buildifier --lint=warn -r .
+    run-clang-tidy $(pwd)/src
