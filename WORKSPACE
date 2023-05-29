@@ -57,6 +57,15 @@ http_archive(
     url = "https://www.sqlite.org/2023/sqlite-amalgamation-3410200.zip",
 )
 
+# ELFIO
+http_archive(
+    name = "elfio",
+    build_file = "//third_party:elfio/elfio.BUILD",
+    sha256 = "c372c1b5d90769c61cf1243fa2e8c1270094d311ee3bf58836ef54b072ba93a9",
+    strip_prefix = "ELFIO-d251da09a07dff40af0b63b8f6c8ae71d2d1938d",
+    url = "https://github.com/serge1/ELFIO/archive/d251da09a07dff40af0b63b8f6c8ae71d2d1938d.tar.gz",
+)
+
 # Hedron's Compile Commands Extractor for Bazel
 # https://github.com/hedronvision/bazel-compile-commands-extractor
 http_archive(
