@@ -19,7 +19,7 @@ Database::Database(const std::string& filename,
   }
 }
 
-void Database::exec(const std::string& sql) {
+void Database::exec(const std::string& sql) const {
   char* errMsg = nullptr;
   const int rc = sqlite3_exec(db.get(), sql.c_str(), nullptr, nullptr, &errMsg);
   if (rc != SQLITE_OK) {

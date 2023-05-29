@@ -19,7 +19,7 @@ class Database {
   /**
    * Accept a list of semi-colon separated SQL statements and execute them.
    */
-  void exec(const std::string& sql);
+  void exec(const std::string& sql) const;
   static void destroy(sqlite3* db);
 
  private:

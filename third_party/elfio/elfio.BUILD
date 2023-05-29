@@ -8,6 +8,7 @@ cc_library(
         ["elfio/*.hpp"],
         exclude = ["elfio/elfio.hpp"],
     ),
+    visibility = ["//visibility:public"],
 )
 
 cc_binary(

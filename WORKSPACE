@@ -66,6 +66,15 @@ http_archive(
     url = "https://github.com/serge1/ELFIO/archive/d251da09a07dff40af0b63b8f6c8ae71d2d1938d.tar.gz",
 )
 
+# SQLiteCpp
+http_archive(
+    name = "SQLiteCpp",
+    build_file = "//third_party:SQLiteCpp.BUILD",
+    sha256 = "4fa61167484bad7220c4582f2d97475da46f364ff3b1b11078fec18db6bdfe33",
+    strip_prefix = "SQLiteCpp-3.3.0",
+    url = "https://github.com/SRombauts/SQLiteCpp/archive/refs/tags/3.3.0.zip",
+)
+
 # Hedron's Compile Commands Extractor for Bazel
 # https://github.com/hedronvision/bazel-compile-commands-extractor
 http_archive(

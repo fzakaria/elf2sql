@@ -3,6 +3,7 @@
 #include <string>
 
 #include "LIEF/ELF.hpp"
+#include "SQLiteCpp/Database.h"
 #include "absl/debugging/failure_signal_handler.h"
 #include "absl/debugging/symbolize.h"
 #include "absl/flags/parse.h"
@@ -51,45 +52,16 @@ void convertElfToSQLite(const std::string& elfFile,
   std::unique_ptr<LIEF::ELF::Binary> binary = LIEF::ELF::Parser::parse(elfFile);
 
   // Create a SQLite database and table
-  sqlite3* db = nullptr;
-  int rc = sqlite3_open(sqliteFile.c_str(), &db);
-  if (rc != SQLITE_OK) {
-    std::cerr << "Failed to open SQLite database: " << sqlite3_errmsg(db)
-              << std::endl;
-    return;
-  }
+  const sqlite::Database db(sqliteFile,
+                            static_cast<sqlite::Database::OpenFlags>(
+                                sqlite::Database::OpenFlags::ReadWrite |
+                                sqlite::Database::OpenFlags::Create));
 
-  char* errMsg = nullptr;
-  const char* createTableSQL =
-      "CREATE TABLE IF NOT EXISTS sections (id INTEGER PRIMARY KEY "
-      "AUTOINCREMENT, name TEXT, size INTEGER);";
-  rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
-  if (rc != SQLITE_OK) {
-    std::cerr << "Failed to create table: " << errMsg << std::endl;
-    sqlite3_free(errMsg);
-    sqlite3_close(db);
-    return;
-  }
-
-  // Extract information from the ELF file and insert it into the table
-  const auto& sections = binary->sections();
-  for (const auto& section : sections) {
-    std::string name = section.name();
-    uint64_t size = section.size();
-
-    std::string sql = "INSERT INTO sections (name, size) VALUES ('" + name +
-                      "', " + std::to_string(size) + ");";
-    rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
-    if (rc != SQLITE_OK) {
-      std::cerr << "Failed to insert data: " << errMsg << std::endl;
-      sqlite3_free(errMsg);
-      sqlite3_close(db);
-      return;
-    }
-  }
-
-  // Close the database connection
-  sqlite3_close(db);
+  // Creat the simplest sqlite database to hold the contents of the binary
+  db.exec(R"(
+    CREATE TABLE IF NOT EXISTS binary (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    content BLOB);
+      )");
 }
 
 int main(int argc, char** argv) {
@@ -112,11 +84,6 @@ int main(int argc, char** argv) {
   const std::string database_filename =
       absl::StrFormat("%s/%s", bazelWorkingDirectory,
                       replace_file_extension(basename(elf_filename), "db"));
-
-  const sqlite::Database db(database_filename,
-                            static_cast<sqlite::Database::OpenFlags>(
-                                sqlite::Database::OpenFlags::ReadWrite |
-                                sqlite::Database::OpenFlags::Create));
 
   convertElfToSQLite(elf_filename, database_filename);
 
