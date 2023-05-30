@@ -18,7 +18,9 @@ cc_binary(
         ":elfio",
         "@com_google_googletest//:gtest_main",
     ],
-    includes = ["."],
+    copts = [
+        "-Iexternal/elfio",
+    ],
     testonly = True,
 )
 
