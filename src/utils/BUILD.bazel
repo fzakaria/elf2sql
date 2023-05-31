@@ -1,0 +1,11 @@
+cc_library(
+    name = "path",
+    srcs = [
+        "path.cc",
+    ],
+    hdrs = [
+        "path.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [],
+)
