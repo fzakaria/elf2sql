@@ -75,6 +75,15 @@ http_archive(
     url = "https://github.com/SRombauts/SQLiteCpp/archive/refs/tags/3.3.0.zip",
 )
 
+# Capstone
+http_archive(
+    name = "capstone",
+    build_file = "//third_party:capstone.BUILD",
+    sha256 = "a1d8557331c51d7bb9fdb23c8b0a7ed7d81a9c66b4cc9f0c2e3a951f63af77dd",
+    strip_prefix = "capstone-a026fc4fe493a6f209e50f6fd8fd7aa3b6418c06",
+    url = "https://github.com/capstone-engine/capstone/archive/a026fc4fe493a6f209e50f6fd8fd7aa3b6418c06.zip",
+)
+
 # Hedron's Compile Commands Extractor for Bazel
 # https://github.com/hedronvision/bazel-compile-commands-extractor
 http_archive(
