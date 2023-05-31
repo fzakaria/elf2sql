@@ -67,15 +67,18 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
+  std::string elf_filename =
+      replace_file_extension(basename(sqlite_filename), "elf");
   // TODO(fzakaria): figure out a better way for this
   //  this allows bazel run to create files where you invoke it.
   const char* bazelWorkingDirectory = std::getenv("BUILD_WORKING_DIRECTORY");
-  const std::string database_filename =
-      absl::StrFormat("%s/%s", bazelWorkingDirectory,
-                      replace_file_extension(basename(sqlite_filename), "elf"));
+  if (bazelWorkingDirectory != nullptr) {
+    elf_filename =
+        absl::StrFormat("%s/%s", bazelWorkingDirectory, elf_filename);
+  }
 
   try {
-    convertSQLiteToElf(sqlite_filename, database_filename);
+    convertSQLiteToElf(sqlite_filename, elf_filename);
   } catch (const std::exception& e) {
     LOG(ERROR) << "Failed to convert SQLite database to ELF: " << e.what();
     return EXIT_FAILURE;

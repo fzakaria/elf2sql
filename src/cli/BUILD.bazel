@@ -35,3 +35,16 @@ cc_binary(
         "@com_google_absl//absl/strings:str_format",
     ],
 )
+
+sh_test(
+    name = "identity_test",
+    srcs = ["identity_test.sh"],
+    args = [
+        "$(rootpath :elf2sql)",
+        "$(rootpath sql2elf)",
+    ],
+    data = [
+        ":elf2sql",
+        ":sql2elf",
+    ],
+)
