@@ -20,4 +20,8 @@ cc_binary(
     deps = [
         ":sqlite3",
     ],
+    copts = [
+        # suppress all warnings
+        "-w",
+    ],
 )

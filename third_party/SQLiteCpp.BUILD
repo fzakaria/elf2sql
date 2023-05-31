@@ -9,6 +9,7 @@ cc_library(
     copts = [
         "-Iexternal/sqlite3",
     ],
+    # Affect internal dependencies.
     strip_include_prefix = "include",
     deps = [
         "@sqlite3",
