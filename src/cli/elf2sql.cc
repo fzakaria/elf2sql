@@ -7,6 +7,7 @@
 #include "absl/log/log.h"
 #include "absl/strings/str_format.h"
 #include "src/cli/common.h"
+#include "src/sql/common.h"
 #include "src/utils/path.h"
 
 void convertElfToSQLite(const std::string& elfFile,
@@ -17,6 +18,9 @@ void convertElfToSQLite(const std::string& elfFile,
 
   // Create a SQLite database and table
   SQLite::Database db(sqliteFile, SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
+
+  // Create the schema for the database
+  CreateDatabaseSchema(db);
 
   // Creat the simplest sqlite database to hold the contents of the binary
   db.exec(R"(

@@ -15,6 +15,7 @@ cc_binary(
     srcs = ["elf2sql.cc"],
     deps = [
         ":common",
+        "//src/sql:common",
         "//src/utils:path",
         "//third_party:lief",
         "@SQLiteCpp",
