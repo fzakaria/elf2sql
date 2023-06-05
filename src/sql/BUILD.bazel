@@ -1,17 +1,17 @@
 filegroup(
     name = "sql_files",
     srcs = glob([
-        "*.sql",
+        "**/*.sql",
     ]),
 )
 
 cc_library(
-    name = "common",
+    name = "manager",
     srcs = [
-        "common.cc",
+        "manager.cc",
     ],
     hdrs = [
-        "common.h",
+        "manager.h",
     ],
     data = [
         ":sql_files",
@@ -20,6 +20,7 @@ cc_library(
     deps = [
         "@SQLiteCpp",
         "@bazel_tools//tools/cpp/runfiles",
+        "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
     ],
 )
