@@ -3,7 +3,9 @@
 #include <string>
 #include <vector>
 
+#include "absl/types/span.h"
 #include "capstone/capstone.h"
+
 /**
  * A friendly wrapper class around Capstone disassembler.
  * ref:
@@ -38,7 +40,7 @@ class Disassembler {
    * @param bytes The raw bytes of the single instruction
    */
   std::vector<Instruction> disassemble(uint64_t address,
-                                       const std::vector<uint8_t>& bytes);
+                                       absl::Span<const uint8_t> bytes);
 
  private:
   csh cs_handle{};

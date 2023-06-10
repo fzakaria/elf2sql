@@ -20,6 +20,8 @@ BUILD_ALL_CONTENT = """filegroup(name = "all", srcs = glob(["**"]), visibility =
 http_archive(
     name = "lief",
     build_file_content = BUILD_ALL_CONTENT,
+    patch_args = ["-p1"],
+    patches = ["//third_party/lief:undef_elf.patch"],
     sha256 = "8834e2ccfeefd1003527887357950173fe55e9a712004aa638af67378e28ef55",
     strip_prefix = "LIEF-0.13.0",
     url = "https://github.com/lief-project/LIEF/archive/refs/tags/0.13.0.tar.gz",

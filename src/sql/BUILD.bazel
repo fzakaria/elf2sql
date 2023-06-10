@@ -18,9 +18,11 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
+        "//src/elf:disassembler",
         "@SQLiteCpp",
         "@bazel_tools//tools/cpp/runfiles",
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/strings:str_format",
+        "@com_google_absl//absl/types:span",
     ],
 )

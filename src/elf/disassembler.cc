@@ -26,7 +26,7 @@ Disassembler::Disassembler(Disassembler::Architecture arch) {
 }
 
 std::vector<Disassembler::Instruction> Disassembler::disassemble(
-    uint64_t address, const std::vector<uint8_t> &bytes) {
+    uint64_t address, absl::Span<const uint8_t> bytes) {
   // Create a raw C memory buffer for capstone to read from
   size_t size = bytes.size();
   const uint8_t *raw_memory = bytes.data();

@@ -2,6 +2,7 @@
 
 #include "SQLiteCpp/Database.h"
 #include "absl/strings/string_view.h"
+#include "absl/types/span.h"
 #include "tools/cpp/runfiles/runfiles.h"
 
 struct InsertElfHeaderRequest {
@@ -22,7 +23,7 @@ class DatabaseManager {
 
   void insertHeader(const InsertElfHeaderRequest& request);
 
-  void insertInstructions(const std::vector<std::string>& instructions);
+  void insertInstructions(absl::Span<const uint8_t> bytes);
 
  private:
   std::string loadSqlFile(absl::string_view sql_file) const;

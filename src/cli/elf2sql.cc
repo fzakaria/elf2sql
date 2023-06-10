@@ -1,6 +1,5 @@
 #include <memory>
 
-#include "LIEF/ELF.hpp"
 #include "SQLiteCpp/Database.h"
 #include "SQLiteCpp/Statement.h"
 #include "absl/log/log.h"
@@ -8,6 +7,9 @@
 #include "src/cli/common.h"
 #include "src/sql/manager.h"
 #include "src/utils/path.h"
+// clang-format off
+#include "LIEF/ELF.hpp"
+// clang-format on
 
 void convertElfToSQLite(const std::string& elfFile,
                         const std::string& sqliteFile) {
@@ -31,12 +33,30 @@ void convertElfToSQLite(const std::string& elfFile,
   // Insert the binary contents into the database raw
   // This is the most basic conversion possible
   SQLite::Statement insert(db, "INSERT INTO binary (content) VALUES (?)");
+  // https://github.com/SRombauts/SQLiteCpp/issues/430
   const int lengthInBytes =
       static_cast<int>(sizeof(uint8_t) * binary->raw().size());
   insert.bind(1, binary->raw().data(), lengthInBytes);
   const int rowsCreated = insert.exec();
   if (rowsCreated == 0) {
     throw std::runtime_error("Failed to insert binary into database");
+  }
+
+  // Insert the ELF header into the database
+  const InsertElfHeaderRequest request{
+      .e_type = static_cast<int>(binary->header().file_type()),
+      .e_machine = static_cast<int>(binary->header().machine_type()),
+      .e_flags = static_cast<int>(binary->header().processor_flag()),
+  };
+  manager.insertHeader(request);
+
+  // We need to find the segments now that have LOAD and R+X
+  for (const auto& segment : binary->segments()) {
+    if (!segment.has(LIEF::ELF::ELF_SEGMENT_FLAGS::PF_X)) {
+      continue;
+    }
+    auto span = segment.content();
+    manager.insertInstructions(span);
   }
 }
 
