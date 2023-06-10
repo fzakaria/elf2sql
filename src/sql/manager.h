@@ -22,6 +22,8 @@ class DatabaseManager {
 
   void insertHeader(const InsertElfHeaderRequest& request);
 
+  void insertInstructions(const std::vector<std::string>& instructions);
+
  private:
   std::string loadSqlFile(absl::string_view sql_file) const;
 

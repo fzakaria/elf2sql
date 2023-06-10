@@ -8,8 +8,7 @@
 #include "absl/strings/str_format.h"
 
 const std::vector<std::string> SCHEMA_SQL_FILES = {
-    "schema/create_elf_header.sql",
-};
+    "schema/create_elf_header.sql", "schema/create_instructions.sql"};
 
 void DatabaseManager::createDatabaseSchema() {
   for (const std::string& sql_file : SCHEMA_SQL_FILES) {
@@ -55,3 +54,5 @@ std::string DatabaseManager::loadSqlFile(absl::string_view sql_file) const {
                   std::istreambuf_iterator<char>());
   return sql;
 }
+void DatabaseManager::insertInstructions(
+    const std::vector<std::string>& instructions) {}

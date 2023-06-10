@@ -1,0 +1,24 @@
+cc_library(
+    name = "disassembler",
+    srcs = [
+        "disassembler.cc",
+    ],
+    hdrs = [
+        "disassembler.h",
+    ],
+    deps = [
+        "@capstone",
+        "@com_google_absl//absl/log:check",
+        "@com_google_absl//absl/strings:str_format",
+    ],
+)
+
+cc_test(
+    name = "disassembler_test",
+    size = "small",
+    srcs = ["disassembler_test.cc"],
+    deps = [
+        ":disassembler",
+        "@com_google_googletest//:gtest_main",
+    ],
+)

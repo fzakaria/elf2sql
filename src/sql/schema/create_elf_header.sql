@@ -14,19 +14,28 @@
 --         Elf64_Half      e_shnum;
 --         Elf64_Half      e_shstrndx;
 -- } Elf64_Ehdr;
-CREATE TABLE Header
+-- Some of the these values are taken from the original ELF header
+-- but they could be changed or many of them are unnecessary.
+CREATE TABLE IF NOT EXISTS Header
 (
-    id        INTEGER PRIMARY KEY,
-    e_type    INTEGER, -- Object file type (ET_REL, ET_EXEC, etc.)
-    e_machine INTEGER, -- Architecture (EM_386, EM_X86_64, etc.)
-    e_version INTEGER, -- Object file version
+    id
+    INTEGER
+    PRIMARY
+    KEY,
+    e_type
+    INTEGER, -- Object file type (ET_REL, ET_EXEC, etc.)
+    e_machine
+    INTEGER, -- Architecture (EM_386, EM_X86_64, etc.)
+    e_version
+    INTEGER, -- Object file version
     -- Only relevant in a binary file
     -- e_entry   INTEGER, -- Entry point virtual address
     -- Only relevant in a binary file
     -- e_phoff      INTEGER, -- Program header table file offset
     -- Only relevant in a binary file
     --  e_shoff    INTEGER, -- Section header table file offset
-    e_flags   INTEGER  -- Processor-specific flags
+    e_flags
+    INTEGER  -- Processor-specific flags
     -- Only relevant in a binary file
     -- Only relevant in a binary file
     -- e_phentsize INTEGER, -- Program header table entry size
