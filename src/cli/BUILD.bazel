@@ -29,11 +29,13 @@ cc_binary(
     srcs = ["sql2elf.cc"],
     deps = [
         ":common",
+        "//src/sql:manager",
         "//src/utils:path",
         "//third_party:lief",
         "@SQLiteCpp",
         "@com_google_absl//absl/log",
         "@com_google_absl//absl/strings:str_format",
+        "@elfio",
     ],
 )
 

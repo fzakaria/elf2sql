@@ -25,6 +25,11 @@ class DatabaseManager {
 
   void insertInstructions(absl::Span<const uint8_t> bytes);
 
+  /**
+   * Function that tests whether a file is a valid SQLite database.
+   */
+  static bool IsSQLiteDatabase(const std::string& filename);
+
  private:
   std::string loadSqlFile(absl::string_view sql_file) const;
 

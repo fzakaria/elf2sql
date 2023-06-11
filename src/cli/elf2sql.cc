@@ -7,6 +7,8 @@
 #include "src/cli/common.h"
 #include "src/sql/manager.h"
 #include "src/utils/path.h"
+// This has to be included at the end because it undefs
+// some macros that are defined in lib/include/elf.h
 // clang-format off
 #include "LIEF/ELF.hpp"
 // clang-format on
@@ -50,14 +52,22 @@ void convertElfToSQLite(const std::string& elfFile,
   };
   manager.insertHeader(request);
 
-  // We need to find the segments now that have LOAD and R+X
-  for (const auto& segment : binary->segments()) {
-    if (!segment.has(LIEF::ELF::ELF_SEGMENT_FLAGS::PF_X)) {
-      continue;
-    }
-    auto span = segment.content();
-    manager.insertInstructions(span);
+  const auto& it =
+      std::find_if(binary->segments().begin(), binary->segments().end(),
+                   [](const auto& segment) {
+                     return segment.has(LIEF::ELF::ELF_SEGMENT_FLAGS::PF_X);
+                   });
+  if (it == it.end()) {
+    throw std::runtime_error(
+        "Expected exactly one loadable executable segment");
   }
+
+  const LIEF::ELF::Segment& segment = *it;
+  auto span = segment.content();
+  // some executables like teensy include the ELF header itself as part
+  // of the executable segment. Let's remove that header from the offset
+  const uint64_t offset = binary->entrypoint() - segment.virtual_address();
+  manager.insertInstructions(span.subspan(offset));
 }
 
 int main(int argc, char** argv) {

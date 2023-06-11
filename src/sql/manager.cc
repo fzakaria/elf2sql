@@ -5,6 +5,7 @@
 #include <string>
 
 #include "SQLiteCpp/Transaction.h"
+#include "absl/log/log.h"
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_format.h"
 #include "src/elf/disassembler.h"
@@ -89,4 +90,14 @@ std::string DatabaseManager::loadSqlFile(absl::string_view sql_file) const {
   std::string sql((std::istreambuf_iterator<char>(sql_stream)),
                   std::istreambuf_iterator<char>());
   return sql;
+}
+bool DatabaseManager::IsSQLiteDatabase(const std::string& filename) {
+  {
+    try {
+      const SQLite::Database db(filename, SQLite::OPEN_READONLY);
+      return true;
+    } catch (const std::exception& e) {
+      return false;
+    }
+  }
 }

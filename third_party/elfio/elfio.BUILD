@@ -8,6 +8,8 @@ cc_library(
         ["elfio/*.hpp"],
         exclude = ["elfio/elfio.hpp"],
     ),
+    # TODO(fzakaria): Remove this once we have a better way to.
+    includes = ["."],
     visibility = ["//visibility:public"],
 )
 
@@ -17,9 +19,6 @@ cc_binary(
     deps = [
         ":elfio",
         "@com_google_googletest//:gtest_main",
-    ],
-    copts = [
-        "-Iexternal/elfio",
     ],
     testonly = True,
 )
