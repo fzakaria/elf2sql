@@ -9,3 +9,15 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [],
 )
+
+cc_library(
+    name = "string",
+    srcs = [
+        "string.cc",
+    ],
+    hdrs = [
+        "string.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [],
+)

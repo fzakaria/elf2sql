@@ -2,7 +2,11 @@
 
 #include <string>
 
-std::string replace_file_extension(const std::string& filename,
-                                   const std::string& new_extension);
+namespace utils {
+namespace path {
+std::string ReplaceFileExtension(const std::string& filename,
+                                 const std::string& new_extension);
 
-std::string basename(const std::string& path);
+std::string Basename(const std::string& path);
+}  // namespace path
+}  // namespace utils

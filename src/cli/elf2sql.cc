@@ -84,8 +84,8 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  std::string database_filename =
-      replace_file_extension(basename(elf_filename), "db");
+  std::string database_filename = utils::path::ReplaceFileExtension(
+      utils::path::Basename(elf_filename), "db");
   // TODO(fzakaria): figure out a better way for this
   //  this allows bazel run to create files where you invoke it.
   const char* bazelWorkingDirectory = std::getenv("BUILD_WORKING_DIRECTORY");

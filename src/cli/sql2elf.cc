@@ -11,20 +11,7 @@
 #include "src/cli/common.h"
 #include "src/sql/manager.h"
 #include "src/utils/path.h"
-
-// https://stackoverflow.com/a/30606613
-std::vector<uint8_t> HexToBytes(const std::string& hex) {
-  std::vector<uint8_t> bytes;
-
-  for (unsigned int i = 0; i < hex.length(); i += 2) {
-    const std::string byteString = hex.substr(i, 2);
-    const auto byte =
-        static_cast<uint8_t>(strtol(byteString.c_str(), nullptr, 16));
-    bytes.push_back(byte);
-  }
-
-  return bytes;
-}
+#include "src/utils/string.h"
 
 void convertSQLiteToElf(const std::string& sqliteFile,
                         const std::string& elfFile) {
@@ -52,7 +39,8 @@ void convertSQLiteToElf(const std::string& sqliteFile,
   const SQLite::Column instructionsColumn =
       db.execAndGet("select group_concat(hex(raw), '') from Instructions;");
   const std::string instructionsAsHex = instructionsColumn.getString();
-  const std::vector<uint8_t> bytes = HexToBytes(instructionsAsHex);
+  const std::vector<uint8_t> bytes =
+      utils::string::HexToBytes(instructionsAsHex);
 
   // Beginning of real ELF writer
   ELFIO::elfio writer;
@@ -69,18 +57,25 @@ void convertSQLiteToElf(const std::string& sqliteFile,
   ELFIO::section* text_sec = writer.sections.add(".text");
   text_sec->set_type(SHT_PROGBITS);
   text_sec->set_flags(SHF_ALLOC | SHF_EXECINSTR);
-  text_sec->set_addr_align(1);
+  text_sec->set_addr_align(0x1);
   text_sec->set_data(reinterpret_cast<const char*>(bytes.data()), bytes.size());
 
-  // Create a load segment
+  // Here is an explanation of something super important when creating segments.
+  // There is an invariant that must be met:
+  // .p_offset % pagesize == .p_vaddr % pagesize
+  // https://github.com/torvalds/linux/blob/3d7cb6b0/fs/binfmt_elf.c
+  // https://android.googlesource.com/platform/bionic/+/master/linker/linker_phdr.cpp
   ELFIO::segment* load_seg = writer.segments.add();
   load_seg->set_type(PT_LOAD);
-  load_seg->set_virtual_address(0x400000);
-  load_seg->set_physical_address(0x400000);
+  load_seg->set_physical_address(0);
   load_seg->set_flags(PF_X | PF_R);
-  load_seg->set_align(1);
+  // load_seg->set_align(1);
+  load_seg->set_align(0x1000);
   load_seg->add_section_index(text_sec->get_index(),
+
                               text_sec->get_addr_align());
+  load_seg->set_virtual_address(0x400000);
+
   // Set the entry point (address where the program starts executing)
   writer.set_entry(load_seg->get_virtual_address());
 
@@ -109,8 +104,8 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  std::string elf_filename =
-      replace_file_extension(basename(sqlite_filename), "elf");
+  std::string elf_filename = utils::path::ReplaceFileExtension(
+      utils::path::Basename(sqlite_filename), "elf");
   // TODO(fzakaria): figure out a better way for this
   //  this allows bazel run to create files where you invoke it.
   const char* bazelWorkingDirectory = std::getenv("BUILD_WORKING_DIRECTORY");

@@ -31,6 +31,7 @@ cc_binary(
         ":common",
         "//src/sql:manager",
         "//src/utils:path",
+        "//src/utils:string",
         "//third_party:lief",
         "@SQLiteCpp",
         "@com_google_absl//absl/log",
@@ -42,12 +43,14 @@ cc_binary(
 sh_test(
     name = "identity_test",
     srcs = ["identity_test.sh"],
-    args = [
-        "$(rootpath :elf2sql)",
-        "$(rootpath sql2elf)",
-    ],
     data = [
         ":elf2sql",
         ":sql2elf",
+    ],
+    deps = [
+        "//tools/bash:unittest",
+        # may technically not be needed
+        # sh_test may include rlocation itself already
+        "@bazel_tools//tools/bash/runfiles",
     ],
 )

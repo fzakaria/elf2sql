@@ -1,0 +1,17 @@
+# //tools/bash:unittest:BUILD.bazel
+# https://www.stevenengelhardt.com/2023/02/26/practical-bazel-using-bazels-bash-unittest-framework/
+# TODO(fzakaria): remove if bazel ever includes it with bazel_tools
+sh_library(
+    name = "unittest",
+    srcs = [
+        "unittest.bash",
+        "unittest_utils.sh",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "unittest_test",
+    srcs = ["unittest_test.sh"],
+    deps = [":unittest"],
+)
