@@ -46,6 +46,7 @@ sh_test(
     data = [
         ":elf2sql",
         ":sql2elf",
+        "//src/examples",
     ],
     deps = [
         "//tools/bash:unittest",

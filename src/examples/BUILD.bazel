@@ -1,6 +1,15 @@
 load("//tools:nasm.bzl", "nasm_binary")
 load("//tools:test_helpers.bzl", "test_return_code")
 
+filegroup(
+    name = "examples",
+    srcs = [
+        "teensy-bin",
+        ":tiny",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 nasm_binary(
     name = "tiny",
     src = "tiny.asm",

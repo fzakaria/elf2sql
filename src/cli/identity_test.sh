@@ -23,7 +23,10 @@ source ./tools/bash/unittest.bash || exit 1
 readonly ELF2SQL="$(rlocation __main__/src/cli/elf2sql)"
 readonly SQL2ELF="$(rlocation __main__/src/cli/sql2elf)"
 
-${ELF2SQL} /usr/bin/ls
-${SQL2ELF} ls.db
+function test_advanced_ls() {
+  ${ELF2SQL} /usr/bin/ls || fail "elf2sql failed"
+  ${SQL2ELF} ls.db || fail "sql2elf failed"
+  ls.elf --help || fail "created invalid ELF binary"
+}
 
-ls.elf --help
+run_suite "Test suite for identity tests"
