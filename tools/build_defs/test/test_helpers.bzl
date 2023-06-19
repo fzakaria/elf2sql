@@ -11,7 +11,7 @@ def test_return_code(name, ret_code, binary):
     native.sh_test(
         name = name,
         size = "small",
-        srcs = ["//tools:test_return_code.sh"],
+        srcs = ["//tools/build_defs/test:test_return_code.sh"],
         # The following command runs my_program and verifies the return code
         args = [
             "$(rootpath %s)" % binary,

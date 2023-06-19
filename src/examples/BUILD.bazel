@@ -1,5 +1,5 @@
-load("//tools:nasm.bzl", "nasm_binary")
-load("//tools:test_helpers.bzl", "test_return_code")
+load("//tools/nasm:nasm.bzl", "nasm_binary")
+load("//tools/build_defs/test:test_helpers.bzl", "test_return_code")
 
 filegroup(
     name = "examples",
