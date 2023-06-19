@@ -32,7 +32,7 @@ cc_library(
     copts = [
         "-Iexternal/elfutils/libelf",
         "-Iexternal/elfutils/lib",
-        "-Ibazel-out/k8-dbg/bin/external/elfutils ",
+        "-I$(BINDIR)/external/elfutils",
         "-DHAVE_CONFIG_H",
         # Disable all warnings
         "-w",
