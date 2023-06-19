@@ -133,3 +133,4 @@ fabric.properties
 user.bazelrc
 *.db
 *.elf
+*.log
