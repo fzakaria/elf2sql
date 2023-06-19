@@ -77,6 +77,15 @@ http_archive(
     url = "https://github.com/SRombauts/SQLiteCpp/archive/refs/tags/3.3.0.zip",
 )
 
+# backward-cpp
+http_archive(
+    name = "backward-cpp",
+    build_file = "//third_party/backward-cpp:backward-cpp.BUILD",
+    sha256 = "42d9151d383f91813c12d06b0c76fd1caf6c6bfa07d1aa2e7ca8a775ad643bdc",
+    strip_prefix = "backward-cpp-2395cfa2422edb71929c9d166a6a614571331db3",
+    url = "https://github.com/bombela/backward-cpp/archive/2395cfa2422edb71929c9d166a6a614571331db3.tar.gz",
+)
+
 # Capstone
 http_archive(
     name = "capstone",
@@ -99,11 +108,50 @@ load("@hedron_compile_commands//:workspace_setup.bzl", "hedron_compile_commands_
 
 hedron_compile_commands_setup()
 
+# NASM
 http_archive(
-    name = "io_buildbuddy_buildbuddy_toolchain",
-    sha256 = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd",
-    strip_prefix = "buildbuddy-toolchain-fd351ca8f152d66fc97f9d98009e0ae000854e8f",
-    urls = ["https://github.com/buildbuddy-io/buildbuddy-toolchain/archive/fd351ca8f152d66fc97f9d98009e0ae000854e8f.tar.gz"],
+    name = "nasm",
+    build_file_content = BUILD_ALL_CONTENT,
+    sha256 = "d833bf0f5716e89dbcd345b7f545f25fe348c6e2ef16dbc293e1027bcd22d881",
+    strip_prefix = "nasm-2.16.01",
+    url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.gz",
+)
+
+# ELFUTILS
+http_archive(
+    name = "elfutils",
+    build_file = "//third_party:elfutils.BUILD",
+    sha256 = "39bd8f1a338e2b7cd4abc3ff11a0eddc6e690f69578a57478d8179b4148708c8",
+    strip_prefix = "elfutils-0.189",
+    url = "https://sourceware.org/elfutils/ftp/0.189/elfutils-0.189.tar.bz2",
+)
+
+# ZLIB
+http_archive(
+    name = "zlib",
+    build_file = "//third_party:zlib.BUILD",
+    sha256 = "c2856951bbf30e30861ace3765595d86ba13f2cf01279d901f6c62258c57f4ff",
+    strip_prefix = "zlib-1.2.13",
+    url = "https://github.com/madler/zlib/archive/refs/tags/v1.2.13.zip",
+)
+
+# LIBUNWIND
+http_archive(
+    name = "libunwind",
+    build_file_content = BUILD_ALL_CONTENT,
+    sha256 = "c24c913d2337d6eff851b6ab32aadfb683a86fee48d28fe1fc9cd56c8e9dfa58",
+    strip_prefix = "libunwind-1.70",
+    url = "https://github.com/libunwind/libunwind/releases/download/v1.7.0/libunwind-1.70.tar.gz",
+)
+
+# LIBDWARF
+http_archive(
+    name = "libdwarf",
+    #build_file = "//third_party:libdwarf.BUILD",
+    build_file_content = BUILD_ALL_CONTENT,
+    sha256 = "4518de76a92af80919945dc4d37dd88414d3fae9116dc424f07f25e1ecc7d004",
+    strip_prefix = "libdwarf-code-db0d0c4de28d3de217d79ed6ce6c8cf34cd017b9",
+    urls = ["https://github.com/davea42/libdwarf-code/archive/db0d0c4de28d3de217d79ed6ce6c8cf34cd017b9.tar.gz"],
 )
 
 http_archive(
@@ -115,17 +163,16 @@ http_archive(
     ],
 )
 
-http_archive(
-    name = "nasm",
-    build_file_content = BUILD_ALL_CONTENT,
-    sha256 = "d833bf0f5716e89dbcd345b7f545f25fe348c6e2ef16dbc293e1027bcd22d881",
-    strip_prefix = "nasm-2.16.01",
-    url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.gz",
-)
-
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 
 bazel_skylib_workspace()
+
+http_archive(
+    name = "io_buildbuddy_buildbuddy_toolchain",
+    sha256 = "e899f235b36cb901b678bd6f55c1229df23fcbc7921ac7a3585d29bff2bf9cfd",
+    strip_prefix = "buildbuddy-toolchain-fd351ca8f152d66fc97f9d98009e0ae000854e8f",
+    urls = ["https://github.com/buildbuddy-io/buildbuddy-toolchain/archive/fd351ca8f152d66fc97f9d98009e0ae000854e8f.tar.gz"],
+)
 
 load("@io_buildbuddy_buildbuddy_toolchain//:deps.bzl", "buildbuddy_deps")
 

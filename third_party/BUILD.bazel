@@ -67,3 +67,33 @@ genrule(
     cmd = "cp $< $@",
     executable = True,
 )
+
+configure_make(
+    name = "libdwarf",
+    configure_in_place = True,
+    lib_source = "@libdwarf//:all",
+    out_static_libs = [
+        "libdwarf.a",
+    ],
+    deps = [
+        "@elfutils//:elf",
+    ],
+    alwayslink = True,
+)
+
+configure_make(
+    name = "libunwind",
+    configure_in_place = True,
+    configure_options = [
+        "--enable-static",
+        "--disable-shared",
+    ],
+    copts = [
+        "-w",
+    ],
+    lib_source = "@libunwind//:all",
+    out_static_libs = [
+        "libunwind.a",
+    ],
+    alwayslink = False,
+)
