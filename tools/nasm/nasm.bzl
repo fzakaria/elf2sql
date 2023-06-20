@@ -39,6 +39,10 @@ def nasm_binary(name, src):
         name = "%s-object" % name,
         src = src,
     )
+
+    # At the moment blink the emulator has a bug where files that end in .bin
+    # are assumed to be flat files and therefore the entry point is wrong
+    # if results in a SIGSEGV.
     out = "%s.bin" % name
     native.genrule(
         name = name,
