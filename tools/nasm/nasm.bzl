@@ -8,6 +8,9 @@ def _nasm_object_impl(ctx):
     args.add("-f", "elf64")
     args.add("-o", out.path)
 
+    args.add("-g")
+    args.add("-F", "dwarf")
+
     ctx.actions.run(
         outputs = [out],
         inputs = [src],
@@ -40,15 +43,13 @@ def nasm_binary(name, src):
         src = src,
     )
 
-    # At the moment blink the emulator has a bug where files that end in .bin
-    # are assumed to be flat files and therefore the entry point is wrong
-    # if results in a SIGSEGV.
-    out = "%s.bin" % name
+    out = name
     native.genrule(
-        name = name,
+        name = "%s-bin" % name,
         outs = [out],
         srcs = [":%s-object" % name],
-        cmd = "ld -z noseparate-code -s $< -o $@",
+        # cmd = "ld -z noseparate-code -s $< -o $@",
+        cmd = "ld -z noseparate-code $< -o $@",
         executable = True,
         message = "Creating the binary %s" % out,
     )

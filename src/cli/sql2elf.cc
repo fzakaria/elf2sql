@@ -18,24 +18,6 @@ void convertSQLiteToElf(const std::string& sqliteFile,
   // Create a SQLite database and table
   SQLite::Database db(sqliteFile, SQLite::OPEN_READONLY);
 
-  // Fetch the binary data from the database
-  // This assumes that there is only one entry at the moment
-  const SQLite::Column column = db.execAndGet(R"(
-    SELECT CONTENT FROM binary LIMIT 1
-      )");
-  if (!column.isBlob()) {
-    throw std::runtime_error("Expected binary blob result.");
-  }
-
-  const char* data = reinterpret_cast<const char*>(column.getBlob());
-  const int size = column.getBytes();
-
-  std::ofstream file(elfFile, std::ios::binary);
-  // Write the data to the file
-  file.write(data, size);
-  // Close the file
-  file.close();
-
   const SQLite::Column instructionsColumn =
       db.execAndGet("select group_concat(hex(raw), '') from Instructions;");
   const std::string instructionsAsHex = instructionsColumn.getString();
@@ -45,10 +27,9 @@ void convertSQLiteToElf(const std::string& sqliteFile,
   // Beginning of real ELF writer
   ELFIO::elfio writer;
 
-  // You can choose the file class: ELFCLASS32 for 32 bit or ELFCLASS64 for 64
-  // bit
+  // Right now we are only supporting 64-bit little endian
+  // TODO(fzakaria): We should grab these from the metadata table
   writer.create(ELFCLASS64, ELFDATA2LSB);
-
   writer.set_os_abi(ELFOSABI_SYSV);
   writer.set_type(ET_EXEC);
   writer.set_machine(EM_X86_64);
@@ -80,7 +61,7 @@ void convertSQLiteToElf(const std::string& sqliteFile,
   writer.set_entry(load_seg->get_virtual_address());
 
   // Finally, write it to a file
-  writer.save("/tmp/sample.elf");
+  writer.save(elfFile);
 
   // TODO(fzakaria): This doesn't only add executable but read + write also
   if (chmod(elfFile.c_str(), S_IRUSR | S_IWUSR | S_IXUSR) != 0) {
@@ -100,7 +81,8 @@ int main(int argc, char** argv) {
 
   const std::string sqlite_filename = argv[1];
   if (!DatabaseManager::IsSQLiteDatabase(sqlite_filename)) {
-    LOG(ERROR) << "The file you provided is not a SQLite file.";
+    LOG(ERROR) << absl::StrFormat(
+        "The file [%s] you provided is not a SQLite file.", sqlite_filename);
     return EXIT_FAILURE;
   }
 

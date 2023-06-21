@@ -5,9 +5,20 @@ filegroup(
     name = "examples",
     srcs = [
         "teensy-bin",
+        # ":hello-world-asm",
         ":tiny",
     ],
     visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "hello-world-c",
+    srcs = ["hello_world.c"],
+)
+
+nasm_binary(
+    name = "hello-world-asm",
+    src = "hello_world.asm",
 )
 
 nasm_binary(
